@@ -2,14 +2,16 @@ import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
 
 export class ComplaintDTO {
   @IsNumber()
-  readonly id: number;
+  id: number;
 
   @IsString()
-  readonly description: string;
+  description: string;
 
   @IsNumber()
-  readonly userId: number;
+  userId: number;
 
   @IsNumber()
-  readonly complaintStatusId: number;
+  complaintStatusId: number;
 }
+
+

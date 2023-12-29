@@ -3,51 +3,32 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Complaint } from './complaint.entity';
 import { ComplaintDTO } from './complaint.dto';
-import { ComplaintListDTO } from './complaintlist.dto';
+
 
 
 @Injectable()
 export class ComplaintService {
-  complaintService: any;
   constructor(
     @InjectRepository(Complaint)
-    private readonly complaintRepository: Repository<Complaint>,
-  ) {}
+    private complaintRepository : Repository<Complaint>
+  ) {
 
-  async getAllComplaints(): Promise<ComplaintListDTO[]> {
-    const complaints = await this.complaintRepository.find();
-    return complaints.map(({ id, description }) => ({ id, description }));
+  }
+  
+  findAll() : Promise<Complaint[]> {
+    return this.complaintRepository.find();
   }
 
-  async getComplaintById(id: number): Promise<ComplaintDTO> {
-    const complaint = await this.complaintRepository.find();
+  findOne(id : number) : Promise<Complaint|null> {
+    return this.complaintRepository.findOneBy({id:id});
 
-    if (!complaint) {
-      throw new NotFoundException(`Complaint with id ${id} not found`);
-    }
-
-    return this.complaintService.getComplaintById(id);
   }
 
-  async createComplaint(createComplaintDTO: ComplaintDTO): Promise<ComplaintDTO> {
-    const newComplaint = this.complaintRepository.create(createComplaintDTO);
-    await this.complaintRepository.save(newComplaint);
-    return this.complaintService.createComplaint(createComplaintDTO);
+  create(complaint : ComplaintDTO ) : Promise<Complaint|null> {
+    return this.complaintRepository.save(complaint);
   }
 
-  async updateComplaint(id: number, updateComplaintDTO: ComplaintDTO): Promise<ComplaintDTO> {
-    await this.getComplaintById(id); 
-
-    await this.complaintRepository.update(id, updateComplaintDTO);
-
-    return {
-      id,
-      ...updateComplaintDTO,
-    };
-  }
-
-  async deleteComplaint(id: number): Promise<void> {
-    await this.getComplaintById(id); 
-    await this.complaintRepository.delete(id);
+  async deleteById(id : number) : Promise<void>{
+    await this.complaintRepository.delete({id:id})
   }
 }

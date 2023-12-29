@@ -1,5 +1,5 @@
 import { IsNumber, IsString, IsArray, ValidateNested } from 'class-validator';
-import { RoomListDTO } from 'src/room/roomlist.dto';
+import { RoomDTO } from 'src/room/room.dto';
 
 export class UserDTO {
   @IsNumber()
@@ -16,5 +16,5 @@ export class UserDTO {
 
   @IsArray()
   @ValidateNested({ each: true })
-  rooms: RoomListDTO[]; 
+  rooms: RoomDTO[]; 
 }

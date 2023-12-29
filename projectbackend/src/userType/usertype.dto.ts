@@ -2,8 +2,8 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class UserTypeDTO {
   @IsNumber()
-  readonly id: number;
+  id: number;
 
   @IsString()
-  readonly status: string;
+  status: string;
 }

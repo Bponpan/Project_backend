@@ -1,11 +1,11 @@
 import { IsNumber, IsArray, ValidateNested } from 'class-validator';
-import { UserListDTO } from 'src/user/userlist.dto';
+import { UserDTO } from 'src/user/user.dto';
 
 export class RoomDTO {
   @IsNumber()
-  readonly id: number;
+  id: number;
 
   @IsArray()
   @ValidateNested({ each: true })
-  readonly users: UserListDTO[]; // Assuming a DTO for User
+  users: UserDTO[]; 
 }

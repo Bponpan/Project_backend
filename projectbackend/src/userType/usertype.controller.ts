@@ -1,21 +1,30 @@
 import { UserTypeDTO } from './usertype.dto';
-import { UserTypeListDTO } from './usertypelist.dto';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
 import { UserTypeService } from './usertype.service';
+import { UserType } from './usertype.entity';
 
 @Controller('usertypes')
 export class UserTypeController {
   constructor(private readonly userTypeService: UserTypeService) {}
 
   @Get()
-  async getAllUserTypes(): Promise<UserTypeListDTO[]> {
-    return this.userTypeService.getAllUserTypes();
+  getIndex(@Req() request : Request) : Promise<UserType[]> {
+    return this.userTypeService.findAll();
+  }
+  
+  @Get("id")
+  getUserById(@Param('id') id : number) : Promise<UserType> {
+    return this.userTypeService.findOne(id);
   }
 
-  @Get(':id')
-  async getUserTypeById(@Param('id') id: number): Promise<UserTypeDTO> {
-    return this.userTypeService.getUserTypeById(id);
+  @Post(":id")
+  postCreate(@Body() createUserDTO : UserTypeDTO) : Promise<UserType> {
+    return this.userTypeService.create(createUserDTO)
   }
 
-  // Add methods for creating, updating, and deleting user types as needed
+  @Delete(":id")
+  deleteUserById(@Param('id') id : number) : string {
+    this.userTypeService.deleteById(id);
+    return ;
+  }
 }

@@ -1,16 +1,23 @@
 import { IsNumber, IsString, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ComplaintStatusListDTO } from './complaintstatuslist.dto';
 
 export class ComplaintStatusDTO {
   @IsNumber()
-  readonly id: number;
+  id: number;
 
   @IsString()
-  readonly status: string;
+  status: string;
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ComplaintStatusListDTO)
-  readonly complaints: ComplaintStatusListDTO[];
+  complaints: ComplaintStatusListDTO[];
+}
+
+export class ComplaintStatusListDTO {
+  @IsNumber()
+  id: number;
+
+  @IsString()
+  status: string;
 }

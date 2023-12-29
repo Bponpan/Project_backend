@@ -1,21 +1,17 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Req } from '@nestjs/common';
 import { NotificationDTO } from './notification.dto';
-import { NotificationListDTO } from './notificationlist.dto';
 import { NotificationService } from './notification.service';
+import { ComplaintNotification } from './notification.entity';
 
 @Controller('notifications')
 export class NotificationController {
-  constructor(private readonly notificationService: NotificationService) {}
+  constructor(private readonly notificationService: NotificationService) {
+
+  }
 
   @Get()
-  async getAllNotifications(): Promise<NotificationListDTO[]> {
-    return this.notificationService.getAllNotifications();
+  getIndex(@Req() request : Request) : Promise<ComplaintNotification[]> {
+    return this.notificationService.findAll();
   }
-
-  @Get(':id')
-  async getNotificationById(@Param('id') id: number): Promise<NotificationDTO> {
-    return this.notificationService.getNotificationById(id);
-  }
-
-  // Add methods for creating, updating, and deleting notifications as needed
+  
 }

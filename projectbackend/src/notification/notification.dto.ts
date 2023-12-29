@@ -3,8 +3,8 @@ import { ComplaintStatusDTO } from 'src/complaintStatus/complaintstatus.dto';
 
 export class NotificationDTO {
   @IsNumber()
-  readonly id: number;
+  id: number;
 
   @IsObject()
-  readonly complaintStatus: ComplaintStatusDTO; 
+  complaintStatus: ComplaintStatusDTO; 
 }

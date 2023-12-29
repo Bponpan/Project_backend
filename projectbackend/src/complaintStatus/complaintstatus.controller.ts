@@ -1,37 +1,31 @@
-import { Controller, Get, Param, Post, Body, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Put, Delete, Req } from '@nestjs/common';
 import { ComplaintStatusService } from './complaintstatus.service';
 import { ComplaintStatusDTO } from './complaintstatus.dto';
-import { ComplaintStatusListDTO } from './complaintstatuslist.dto';
+import { ComplaintStatus } from './complaintstatus.entity';
+
 
 @Controller('complaint-statuses')
 export class ComplaintStatusController {
   constructor(private readonly complaintStatusService: ComplaintStatusService) {}
 
   @Get()
-  async getAllComplaintStatuses(): Promise<ComplaintStatusListDTO[]> {
-    return this.complaintStatusService.getAllComplaintStatuses();
+  getIndex(@Req() request : Request) : Promise<ComplaintStatus[]> {
+    return this.complaintStatusService.findAll();
+  }
+  
+  @Get("id")
+  getUserById(@Param('id') id : number) : Promise<ComplaintStatus> {
+    return this.complaintStatusService.findOne(id);
   }
 
-  @Get(':id')
-  async getComplaintStatusById(@Param('id') id: number): Promise<ComplaintStatusDTO> {
-    return this.complaintStatusService.getComplaintStatusById(id);
+  @Post(":id")
+  postCreate(@Body() createComplaintDTO : ComplaintStatusDTO) : Promise<ComplaintStatus> {
+    return this.complaintStatusService.create(createComplaintDTO)
   }
 
-  @Post()
-  async createComplaintStatus(@Body() createComplaintStatusDTO: ComplaintStatusDTO): Promise<ComplaintStatusDTO> {
-    return this.complaintStatusService.createComplaintStatus(createComplaintStatusDTO);
-  }
-
-  @Put(':id')
-  async updateComplaintStatus(
-    @Param('id') id: number,
-    @Body() updateComplaintStatusDTO: ComplaintStatusDTO,
-  ): Promise<ComplaintStatusDTO> {
-    return this.complaintStatusService.updateComplaintStatus(id, updateComplaintStatusDTO);
-  }
-
-  @Delete(':id')
-  async deleteComplaintStatus(@Param('id') id: number): Promise<void> {
-    return this.complaintStatusService.deleteComplaintStatus(id);
+  @Delete(":id")
+  deleteUserById(@Param('id') id : number) : string {
+    this.complaintStatusService.deleteById(id);
+    return ;
   }
 }

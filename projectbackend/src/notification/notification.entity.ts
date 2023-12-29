@@ -1,7 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { Complaint } from 'src/complaint/complaint.entity';
+import { ComplaintStatus } from 'src/complaintStatus/complaintstatus.entity';
+import { User } from 'src/user/user.entity';
 
 @Entity()
-export class notification {
+export class ComplaintNotification {
   @PrimaryGeneratedColumn()
   id : number ;
 
@@ -17,84 +20,3 @@ export class notification {
   complaint: Complaint;
 }
 
-@Entity()
-export class Complaint {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  description: string;
-
-  @ManyToOne(() => User, (user) => user)
-  user: User;
-
-  @ManyToOne(() => ComplaintStatus, (complaintStatus) => complaintStatus.complaints)
-  @JoinColumn()
-  complaintStatus: ComplaintStatus;
-  notifications: any;
-}
-
-@Entity()
-export class ComplaintStatus {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  status: string;
-
-  @OneToMany(() => Complaint, (complaint) => complaint.complaintStatus)
-  complaints: Complaint[];
-
-}
-
-@Entity()
-export class User {
-    @PrimaryGeneratedColumn()
-    id : number;
-
-    @Column()
-    username : string;
-
-    @Column()
-    password: string; // Change from number to string
-
-    @Column()
-    phonenumber: number;
-
-    @ManyToOne(() => UserType)
-    usertype: UserType;
-
-    @OneToMany(() => Complaint, (complaint) => complaint.user)
-    complaints: Complaint[];
-
-    @ManyToOne(() => Room, (room) => room.users)
-    @JoinColumn()
-    roomNumber: Room;
-
-    @OneToMany(() => Notification, (notification) => notification) 
-    notifications: Notification[]; 
-}
-
-@Entity()
-export class UserType {
-    @PrimaryGeneratedColumn()
-    id : number ;
-
-    @Column()
-  status: string; 
-  @OneToOne(() => User)
-  @JoinColumn()
-  user: User;
-}
-
-@Entity()
-export class Room {
-  @PrimaryGeneratedColumn()
-  id : number;
-
-  @Column()
-  room : number;
-
-  @OneToMany(() => User, (user) => user.roomNumber)
-  users: User[]; 
-}

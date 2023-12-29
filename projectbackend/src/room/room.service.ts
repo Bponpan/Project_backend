@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Room } from './room.entity';
 import { RoomDTO } from './room.dto';
-import { RoomListDTO } from './roomlist.dto';
+
 
 
 @Injectable()
@@ -13,20 +13,21 @@ export class RoomService {
     private readonly roomRepository: Repository<Room>,
   ) {}
 
-  async getAllRooms(): Promise<RoomListDTO[]> {
-    const rooms = await this.roomRepository.find();
-    return rooms.map(({ id }) => ({ id }));
+  findAll() : Promise<Room[]> {
+    return this.roomRepository.find();
   }
 
-  async getRoomById(id: number): Promise<RoomDTO> {
-    const room = await this.roomRepository.find();
+  findOne(id : number) : Promise<Room|null> {
+    return this.roomRepository.findOneBy({id:id});
 
-    if (!room) {
-      throw new NotFoundException(`Room with id ${id} not found`);
-    }
-
-    return ;
   }
 
+  create(room : RoomDTO ) : Promise<Room|null> {
+    return this.roomRepository.save(room);
+  }
+
+  async deleteById(id : number) : Promise<void>{
+    await this.roomRepository.delete({id:id})
+  }
   
 }

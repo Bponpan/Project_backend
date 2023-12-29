@@ -1,4 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import { UserType } from 'src/userType/usertype.entity';
+import { Complaint } from 'src/complaint/complaint.entity';
+import { Room } from 'src/room/room.entity';
+import { ComplaintNotification } from 'src/notification/notification.entity';
 
 
 @Entity()
@@ -25,80 +29,8 @@ export class User {
     @JoinColumn()
     roomNumber: Room;
 
-    @OneToMany(() => Notification, (notification) => notification) 
-    notifications: Notification[]; 
+    @OneToMany(() => ComplaintNotification, (notification) => notification) 
+    notifications: ComplaintNotification[]; 
     room: any;
-}
-
-@Entity()
-export class Room {
-  @PrimaryGeneratedColumn()
-  id : number;
-
-  @Column()
-  room : number;
-
-  @OneToMany(() => User, (user) => user.roomNumber)
-  users: User[]; 
-}
-
-@Entity()
-export class notification {
-  @PrimaryGeneratedColumn()
-  id : number ;
-
-  @ManyToOne(() => ComplaintStatus, (complaintStatus) => complaintStatus.complaints)
-  @JoinColumn()
-  complaintStatus: ComplaintStatus;
-
-  @ManyToOne(() => User, (user) => user.notifications)
-  user: User;
-
-  @ManyToOne(() => Complaint, (complaint) => complaint.notifications)
-  @JoinColumn()
-  complaint: Complaint;
-}
-
-@Entity()
-export class Complaint {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  description: string;
-
-  @ManyToOne(() => User, (user) => user)
-  user: User;
-
-  @ManyToOne(() => ComplaintStatus, (complaintStatus) => complaintStatus.complaints)
-  @JoinColumn()
-  complaintStatus: ComplaintStatus;
-  notifications: any;
-}
-
-@Entity()
-export class ComplaintStatus {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  status: string;
-
-  @OneToMany(() => Complaint, (complaint) => complaint.complaintStatus)
-  complaints: Complaint[];
-
-}
-
-
-@Entity()
-export class UserType {
-    @PrimaryGeneratedColumn()
-    id : number ;
-
-    @Column()
-  status: string; 
-  @OneToOne(() => User)
-  @JoinColumn()
-  user: User;
 }
 

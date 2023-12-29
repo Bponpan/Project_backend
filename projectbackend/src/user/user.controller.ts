@@ -21,7 +21,7 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Post(":id")
+  @Post()
   postCreate(@Body() createUserDTO : UserDTO) : Promise<User> {
     return this.userService.create(createUserDTO)
   }

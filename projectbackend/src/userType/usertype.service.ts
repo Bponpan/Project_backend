@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserType } from './usertype.entity';
 import { UserTypeDTO } from './usertype.dto';
-import { UserTypeListDTO } from './usertypelist.dto';
+
 
 @Injectable()
 export class UserTypeService {
@@ -12,20 +12,21 @@ export class UserTypeService {
     private readonly userTypeRepository: Repository<UserType>,
   ) {}
 
-  async getAllUserTypes(): Promise<UserTypeListDTO[]> {
-    const userTypes = await this.userTypeRepository.find();
-    return userTypes.map(({ id, status }) => ({ id, status }));
+  findAll() : Promise<UserType[]> {
+    return this.userTypeRepository.find();
   }
 
-  async getUserTypeById(id: number): Promise<UserTypeDTO> {
-    const userType = await this.userTypeRepository.find();
+  findOne(id : number) : Promise<UserType|null> {
+    return this.userTypeRepository.findOneBy({id:id});
 
-    if (!userType) {
-      throw new NotFoundException(`UserType with id ${id} not found`);
-    }
-
-    return ;
   }
 
+  create(userType : UserTypeDTO ) : Promise<UserType|null> {
+    return this.userTypeRepository.save(userType);
+  }
+
+  async deleteById(id : number) : Promise<void>{
+    await this.userTypeRepository.delete({id:id})
+  }
   
 }
